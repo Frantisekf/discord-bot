@@ -1,9 +1,9 @@
 import { Discord, On, Client } from "@typeit/discord";
 import { Message } from "discord.js";
-import { config } from 'dotenv';
+import { config } from "dotenv";
 import CommandsList from "./commands";
 import Command from "./command";
-import './env';
+import "./env";
 
 @Discord
 export class AppDiscord {
@@ -11,6 +11,14 @@ export class AppDiscord {
   private prefix: string = "!";
 
   static start() {
+    console.log(process.env.TOKEN);
+
+    if (!process) {
+      throw new Error(
+        "Token has not been set. Define token in .local.env at root directory"
+      );
+    }
+
     console.info("Initializing");
     this.client = new Client();
 

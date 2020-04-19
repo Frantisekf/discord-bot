@@ -1,5 +1,4 @@
 import Command from '../command'
-import fetch from 'node-fetch'
 import { getRandomInt } from '../utils/random'
 
 export default class RandomNumber extends Command {
