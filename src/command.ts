@@ -1,6 +1,5 @@
-  
-import { Message } from 'discord.js';
-import { Client } from '@typeit/discord';
+import { Message } from "discord.js";
+import { Client } from "@typeit/discord";
 
 export default class Command {
   message: Message;
@@ -13,5 +12,6 @@ export default class Command {
     this.args = args;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   async execute() {}
 }

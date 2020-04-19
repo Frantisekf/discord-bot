@@ -8,7 +8,7 @@ import "./env";
 @Discord
 export class AppDiscord {
   private static client: Client;
-  private prefix: string = "!";
+  private prefix = "!";
 
   static start() {
     console.log(process.env.TOKEN);
@@ -33,6 +33,7 @@ export class AppDiscord {
   async onMessage(message: Message, client: Client) {
     if (AppDiscord.client.user.id !== message.author.id) {
       if (message.content[0] === this.prefix) {
+        // eslint-disable-next-line prefer-const
         let [cmd, ...args] = message.content
           .replace(this.prefix, "")
           .split(" ");
