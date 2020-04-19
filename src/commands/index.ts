@@ -3,7 +3,8 @@ import RandomNumber from './randomNumber'
 
 
 const CommandsList: Record<string, typeof Command> = {
-  randomNum: RandomNumber,
+  // command names must be lowercase
+  random: RandomNumber,
 
 };
 
