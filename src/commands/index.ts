@@ -3,9 +3,8 @@ import RandomNumber from "./randomNumber";
 import DadJoke from "./dadjoke";
 
 const CommandsList: Record<string, typeof Command> = {
-  // command names must be lowercase
-  random: RandomNumber,
-  joke: DadJoke,
+  randomNumber: RandomNumber,
+  dadJoke: DadJoke,
 };
 
 export default CommandsList;

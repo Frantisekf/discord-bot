@@ -52,13 +52,21 @@ export class AppDiscord {
           return;
         }
 
-        const Command = CommandsList[cmd];
+        let command: typeof Command;
 
-        if (Command) {
+        // Iterates over Commands from the CommandsList and case insensitively finds the one matching users command
+        for(let key in CommandsList) {
+          if(key.toLowerCase() === cmd) {
+            command = CommandsList[key];
+            break;
+          }
+        }
+
+        if (command) {
           console.info(`${cmd} [${args.join(", ")}] - execution`);
 
           try {
-            new Command(message, client, args).execute();
+            new command(message, client, args).execute();
           } catch (e) {
             console.error(e);
             message.channel.send("check console");
