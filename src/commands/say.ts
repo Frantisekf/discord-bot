@@ -47,6 +47,7 @@ export default class Say extends Command {
         // cleanup
         dispatcher.destroy();
         fs.unlinkSync(fileName);
+        this.message.member.voice.channel.leave();
       });
     } else {
       this.message.reply("You need to join a voice channel first!");
