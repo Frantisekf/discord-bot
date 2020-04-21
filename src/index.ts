@@ -4,6 +4,7 @@ import { config } from "dotenv";
 import CommandsList from "./commands";
 import Command from "./command";
 import "./env";
+import Logger from "./utils/logger";
 
 @Discord
 export class AppDiscord {
@@ -11,7 +12,7 @@ export class AppDiscord {
   private prefix = "!";
 
   static start() {
-    console.log(process.env.TOKEN);
+    Logger.log(process.env.TOKEN);
 
     if (!process) {
       throw new Error(
@@ -19,13 +20,13 @@ export class AppDiscord {
       );
     }
 
-    console.info("Initializing");
+    Logger.info("Initializing");
     this.client = new Client();
 
     this.client
       .login(process.env.TOKEN, `${__dirname}/*Discord.ts`)
       .then(() => {
-        console.info("Bot logged in");
+        Logger.info("Bot logged in");
       });
   }
 
@@ -55,20 +56,20 @@ export class AppDiscord {
         let command: typeof Command;
 
         // Iterates over Commands from the CommandsList and case insensitively finds the one matching users command
-        for(let key in CommandsList) {
-          if(key.toLowerCase() === cmd) {
+        for (let key in CommandsList) {
+          if (key.toLowerCase() === cmd) {
             command = CommandsList[key];
             break;
           }
         }
 
         if (command) {
-          console.info(`${cmd} [${args.join(", ")}] - execution`);
+          Logger.info(`${cmd} [${args.join(", ")}] - execution`);
 
           try {
             new command(message, client, args).execute();
           } catch (e) {
-            console.error(e);
+            Logger.error(e);
             message.channel.send("check console");
           }
 
