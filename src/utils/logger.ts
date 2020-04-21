@@ -6,7 +6,16 @@ const consolere = require("console-remote-client").connect(
 );
 consolere.re.info(`Remote console url: http://console.re/${channelName}`);
 
-const Logger = {
+interface Logger {
+  log: Function;
+  info: Function;
+  warn: Function;
+  error: Function;
+  debug: Function;
+  clear: Function;
+}
+
+const Logger: Logger = {
   log: (param) => consolere.re.log(param),
   info: (param) => consolere.re.info(param),
   warn: (param) => consolere.re.warn(param),
