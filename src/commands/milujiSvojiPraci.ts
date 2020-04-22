@@ -8,7 +8,7 @@ import Logger from "../utils/logger";
 export default class MilujiSvojiPraci extends Command {
   async execute() {
     if (this.message.member && this.message.member.voice.channel) {
-      const theBot: TheBot = TheBot.getInstance();
+      const theBot: TheBot = TheBot.getInstance(this.message.member.guild.id);
 
       const mspFolder = `${process.cwd()}/data/audio/msp`;
       const files = fs.readdirSync(mspFolder);

@@ -1,8 +1,6 @@
 import Command from "../command";
 import TheBot from "../bot/theBot";
 
-// Creates a client
-
 export default class Say extends Command {
   async execute() {
     // we want the bot to say something in the triggering users voice channel
@@ -11,7 +9,7 @@ export default class Say extends Command {
       // Join the words to a sentence
       const text = this.args.join(" ");
 
-      const theBot: TheBot = TheBot.getInstance();
+      const theBot: TheBot = TheBot.getInstance(this.message.member.guild.id);
 
       await theBot.joinVoice(this.message.member.voice.channel);
       await theBot.say(text);

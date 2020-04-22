@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import Logger from "../utils/logger";
 
 export default class TheBot {
-  private static instance: TheBot;
+  private static instances: Record<string, TheBot> = {};
 
   private static INACTIVE_TIME = 10 * 1000;
 
@@ -29,12 +29,12 @@ export default class TheBot {
    * This implementation let you subclass the Singleton class while keeping
    * just one instance of each subclass around.
    */
-  public static getInstance(): TheBot {
-    if (!TheBot.instance) {
-      TheBot.instance = new TheBot();
+  public static getInstance(id: string): TheBot {
+    if (!TheBot.instances || !TheBot.instances[id]) {
+      TheBot.instances[id] = new TheBot();
     }
 
-    return TheBot.instance;
+    return TheBot.instances[id];
   }
 
   private onInactive() {
@@ -48,31 +48,21 @@ export default class TheBot {
 
   private refreshActivityTimer() {
     Logger.log("Refreshing activity timer");
-    this.voiceActivityTimer = setTimeout(
-      () => this.onInactive(),
-      TheBot.INACTIVE_TIME
-    );
+    this.voiceActivityTimer = setTimeout(() => this.onInactive(), TheBot.INACTIVE_TIME);
   }
 
   public async joinVoice(voiceChannel: VoiceChannel) {
-    Logger.log(
-      `Bot wants to join channel ${
-        voiceChannel && voiceChannel.name
-      }, current channel is ${this.voiceChannel && this.voiceChannel.name}`
-    );
-    if (
-      voiceChannel &&
-      (!this.voiceChannel || this.voiceChannel.name !== voiceChannel.name)
-    ) {
+    Logger.log(`Bot wants to join channel ${voiceChannel && voiceChannel.name}, current channel is ${this.voiceChannel && this.voiceChannel.name}`);
+    if (voiceChannel && (!this.voiceChannel || this.voiceChannel.name !== voiceChannel.name)) {
       this.voiceChannel = voiceChannel;
       this.voiceConnection = await voiceChannel.join();
-      Logger.log(`Joining voice channel ${voiceChannel.name}`);
+      Logger.log(`Bot joining voice channel ${voiceChannel.name}`);
     }
   }
 
   public leaveVoice() {
     if (this.voiceChannel) {
-      Logger.log(`Leaving voice channel ${this.voiceChannel.name}`);
+      Logger.log(`Bot leaving voice channel ${this.voiceChannel.name}`);
       this.voiceChannel.leave();
       this.voiceChannel = undefined;
       this.voiceConnection = undefined;
@@ -80,12 +70,13 @@ export default class TheBot {
   }
 
   public async say(text: string) {
-    Logger.log(
-      `Bot wants to say '${text}' on ${
-        this.voiceChannel && this.voiceChannel.name
-      }`
-    );
-
+    Logger.log(`Bot wants to say '${text}' in ${this.voiceChannel && this.voiceChannel.name}`);
+    if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+      Logger.log(
+        `I am sorry, I'm afraid I can't let you do that.\n(GOOGLE_APPLICATION_CREDENTIALS does not point to a Google Cloud service account JSON file)`
+      );
+      return;
+    }
     if (this.voiceChannel && this.voiceConnection) {
       this.stopActivityTimer();
       // Build a request for Google Text-To-Speech API
@@ -123,11 +114,7 @@ export default class TheBot {
   }
 
   public async playAudioFile(filePath: string) {
-    Logger.log(
-      `Bot wants to play '${filePath}' on ${
-        this.voiceChannel && this.voiceChannel.name
-      }`
-    );
+    Logger.log(`Bot wants to play '${filePath}' in ${this.voiceChannel && this.voiceChannel.name}`);
     if (this.voiceChannel && this.voiceConnection) {
       this.stopActivityTimer();
 
