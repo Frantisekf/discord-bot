@@ -55,6 +55,11 @@ export default class TheBot {
   }
 
   public async joinVoice(voiceChannel: VoiceChannel) {
+    Logger.log(
+      `Bot wants to join channel ${
+        voiceChannel && voiceChannel.name
+      }, current channel is ${this.voiceChannel && this.voiceChannel.name}`
+    );
     if (
       voiceChannel &&
       (!this.voiceChannel || this.voiceChannel.name !== voiceChannel.name)
@@ -75,6 +80,12 @@ export default class TheBot {
   }
 
   public async say(text: string) {
+    Logger.log(
+      `Bot wants to say '${text}' on ${
+        this.voiceChannel && this.voiceChannel.name
+      }`
+    );
+
     if (this.voiceChannel && this.voiceConnection) {
       this.stopActivityTimer();
       // Build a request for Google Text-To-Speech API
@@ -112,6 +123,11 @@ export default class TheBot {
   }
 
   public async playAudioFile(filePath: string) {
+    Logger.log(
+      `Bot wants to play '${filePath}' on ${
+        this.voiceChannel && this.voiceChannel.name
+      }`
+    );
     if (this.voiceChannel && this.voiceConnection) {
       this.stopActivityTimer();
 
