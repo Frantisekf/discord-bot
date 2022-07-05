@@ -14,7 +14,7 @@
   "author": "TGK",
   "license": "ISC",
   "dependencies": {
-    "@discordjs/opus": "^0.1.0",
+    "@discordjs/opus": "^0.8.0",
     "@google-cloud/text-to-speech": "^2.3.0",
     "@types/ffmpeg": "^1.0.0",
     "@types/node": "^13.13.0",
